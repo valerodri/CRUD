@@ -7,18 +7,15 @@ document.addEventListener("DOMContentLoaded", function(){
     const postLastname = document.getElementById("inputPostApellido");
     const results = document.getElementById("results");
 
-
-
     document.addEventListener('input', function () {
         if (postName.value !== "" && postLastname.value !== "") {
             btnPost.disabled = false;
         };
     });
 
-    //Evento buscar por ID
-    btnBuscar.addEventListener("click", function(){
-        const input = document.getElementById("inputGet1Id").value;
-        const urlID = url + input;
+    //Evento buscar por ID\\\\
+    function buscar(id){
+        const urlID = url + id;
         console.log(urlID);
         fetch(urlID)
             .then((response) => {
@@ -28,8 +25,9 @@ document.addEventListener("DOMContentLoaded", function(){
             return response.json();
         })
             .then(data => {
+                console.log(data)
                 results.innerHTML = '';
-                if (input === '') {
+                if (id === '') {
                     data.forEach(element => {
                         results.innerHTML += `
                         <label>ID: ${element.id}</label>
@@ -47,16 +45,18 @@ document.addEventListener("DOMContentLoaded", function(){
                         <br>
                         `;
                 }
-
-                
+    
         })
             .catch(error => {
             console.error(error);
         });
+    }
+
+
+    btnBuscar.addEventListener("click", function(){
+        const input = document.getElementById("inputGet1Id").value;
+        buscar(input);
     })
-
-    
-
 
     //Evento agregar por ID
     btnPost.addEventListener("click", function(e){
@@ -65,13 +65,13 @@ document.addEventListener("DOMContentLoaded", function(){
             //const urlID = url + input;
             //console.log(urlID);
 
-      const nuevoElemento = {
+        const nuevoElemento = {
             name: nombre,
-            lastName: apellido,
+            lastname: apellido,
         };
 
         const opciones = {
-             method: "POST",
+            method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(nuevoElemento),
         };
@@ -84,18 +84,13 @@ document.addEventListener("DOMContentLoaded", function(){
             return response.json();
          })
             .then(data => {
-                results.innerHTML = '';
+                console.log(data)
+                buscar("");
                  // No funciona entonces se me ocurre sacara la funcion de buscar 
                  //del addEventL3istener y usarla para esto tambien onda asi:  
                 //input = "";
                 //buscar(); 
-                data.forEach(element => {
-                     results.innerHTML += `
-                        <label>ID: ${element.id}</label>
-                        <label>NAME: ${element.name}</label>
-                        <label>LASTNAME: ${element.lastname}</label>
-                        <br>
-                    `;                     
+                                    
                     
             })
             .catch(error => {
@@ -106,40 +101,7 @@ document.addEventListener("DOMContentLoaded", function(){
     })
     
 });
-});
 
 
 
-/*
-// fetch(url){
-// 	.then((response) => {
-// 	  if (!response.ok) {
-// 		  throw new Error("Error de red.");
-// 	  }
-// 	  return response.json();
-// })
-// 	.then(data => {
-// 	//acá va la info que se quiere mostrar
-// })
-// 	.catch(error => {
-// 	console.error(error);
-// })};
 
-
-// fetch('../post.php', {
-//     method: 'POST',
-//     body: data
-//  })
-//  .then(function(response) {
-//     if(response.ok) {
-//         return response.text()
-//     } else {
-//         throw "Error en la llamada Ajax";
-//     }
- 
-//  })
-//  .then(function(texto) {
-//     console.log(texto);
-//  })
-//  .catch(function(err) {
-// */
